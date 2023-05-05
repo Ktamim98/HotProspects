@@ -4,7 +4,7 @@
 //
 //  Created by Tamim Khan on 5/5/23.
 //
-
+import CodeScanner
 import SwiftUI
 
 struct ProspectsView: View {
@@ -41,6 +41,8 @@ struct ProspectsView: View {
         }
     }
     
+    @State private var isShowingScanner = false
+    
     
     
     var body: some View {
@@ -52,20 +54,62 @@ struct ProspectsView: View {
                             .font(.headline)
                         Text(prospect.emailAddress)
                             .foregroundColor(.secondary)
+                        
                     }
+                    .swipeActions {
+                        if prospect.isContacted {
+                            Button {
+                                prospects.toggle(prospect)
+                            } label: {
+                                Label("Mark Uncontacted", systemImage: "person.crop.circle.badge.xmark")
+                            }
+                            .tint(.blue)
+                        } else {
+                            Button {
+                                prospects.toggle(prospect)
+                            } label: {
+                                Label("Mark Contacted", systemImage: "person.crop.circle.fill.badge.checkmark")
+                            }
+                            .tint(.green)
+                        }
+                    }
+                    
                 }
             }
                 .navigationTitle(title)
                 .toolbar{
                     Button{
-                        let prospect = Prospect()
-                        prospect.name = "Tamim"
-                        prospect.emailAddress = "tamim@swift.com"
-                        prospects.people.append(prospect)
+                       isShowingScanner = true
                     }label: {
                         Label("Scan", systemImage: "qrcode.viewfinder")
                     }
                 }
+                .sheet(isPresented: $isShowingScanner){
+                    CodeScannerView(codeTypes: [.qr], simulatedData: "tamim\ntamim@swift.com", completion: handleScan)
+                }
+            
+        }
+        
+    }
+    
+    
+    func handleScan(result: Result<ScanResult, ScanError>){
+        isShowingScanner = false
+        switch result{
+        case .success(let result):
+            let details = result.string.components(separatedBy: "\n")
+            guard details.count == 2 else {return}
+            
+            
+            let person = Prospect()
+            person.name = details[0]
+            person.emailAddress = details[1]
+            
+            
+            prospects.people.append(person)
+            
+        case .failure(let error):
+            print("Scannin failed \(error.localizedDescription)")
         }
         
     }
