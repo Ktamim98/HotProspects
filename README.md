@@ -1,6 +1,9 @@
 # HotProspects
 HotProspects is a simple iOS app that allows users to generate a QR code containing their name and email address, which others can scan to quickly add them as a contact. The app uses SwiftUI for its user interface and Core Image for generating the QR code, toggle whether they have contacted the person represented by the code, and receive notifications on their lock screen. The app also includes a code scanner package and swipe gestures to show notification alerts.
 
+https://github.com/Ktamim98/HotProspects/assets/124142522/d89d5901-8b33-436d-b947-24da3c1ec5bb
+
+
 ## Features
 - Generate a QR code based on user-provided name and email address
 - Save the generated QR code to the photo library
