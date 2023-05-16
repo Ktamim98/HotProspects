@@ -32,6 +32,7 @@ struct ContentView: View {
         }
         .environmentObject(prospects)
     }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {

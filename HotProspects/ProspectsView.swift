@@ -29,6 +29,7 @@ struct ProspectsView: View {
     
     
     @EnvironmentObject var prospects: Prospects
+    @State private var showingDeleteAlert = false
     
     
     var filterProspects: [Prospect]{
@@ -58,6 +59,7 @@ struct ProspectsView: View {
                         
                     }
                     .swipeActions {
+                        
                         if prospect.isContacted {
                             Button {
                                 prospects.toggle(prospect)
@@ -81,26 +83,37 @@ struct ProspectsView: View {
                             .tint(.orange)
                         }
                     }
+                    .swipeActions(edge: .leading){
+                        Button {
+                                prospects.remove(prospect)
+                            } label: {
+                                Label("Remove", systemImage: "trash")
+                            }
+                            .tint(.red)
+                    }
+                
                     
                 }
+               
             }
                 .navigationTitle(title)
                 .toolbar{
-                    Button{
-                       isShowingScanner = true
-                    }label: {
-                        Label("Scan", systemImage: "qrcode.viewfinder")
+                    
+                    
+                    ToolbarItem(placement: .navigationBarTrailing){
+                        Button{
+                           isShowingScanner = true
+                        }label: {
+                            Label("Scan", systemImage: "qrcode.viewfinder")
+                        }
                     }
                 }
                 .sheet(isPresented: $isShowingScanner){
                     CodeScannerView(codeTypes: [.qr], simulatedData: "tamim\ntamim@swift.com", completion: handleScan)
                 }
-            
         }
         
     }
-    
-    
     
     func addNotification(for prospect: Prospect) {
         let center = UNUserNotificationCenter.current()
@@ -157,6 +170,8 @@ struct ProspectsView: View {
         
     }
 }
+
+
 
 struct ProspectsView_Previews: PreviewProvider {
     static var previews: some View {

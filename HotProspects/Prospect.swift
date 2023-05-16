@@ -33,6 +33,12 @@ class Prospect: Identifiable, Codable{
         people.append(prospect)
         save()
     }
+    func remove(_ prospect: Prospect) {
+            if let index = people.firstIndex(where: { $0.id == prospect.id }) {
+                people.remove(at: index)
+                save()
+            }
+        }
     
    private func save(){
         if let encoded = try? JSONEncoder().encode(people){
@@ -45,4 +51,5 @@ class Prospect: Identifiable, Codable{
         prospect.isContacted.toggle()
         save()
     }
+    
 }
